@@ -1,11 +1,18 @@
+require 'spec_helper'
 require 'securerandom'
 
 describe AppInfo do
-  let(:apk_file) { File.dirname(__FILE__) + '/fixtures/apps/android.apk' }
-  let(:ipa_file) { File.dirname(__FILE__) + '/fixtures/apps/iphone.ipa' }
+  let(:apk_file) { APK_FILE }
+  let(:ipa_file) { IPA_IPHONE_FILE }
+  let(:app_file) { APP_FILE }
 
   it 'should parse when file extion is .ipa' do
     file = AppInfo.parse(ipa_file)
+    expect(file.class).to eq(AppInfo::Parser::IPA)
+  end
+
+  it 'should parse when file extion is .app' do
+    file = AppInfo.parse(app_file)
     expect(file.class).to eq(AppInfo::Parser::IPA)
   end
 
@@ -21,7 +28,7 @@ describe AppInfo do
     end.to raise_error(AppInfo::NotFoundError)
   end
 
-  %w(txt pdf app zip rar).each do |ext|
+  %w[txt pdf zip rar].each do |ext|
     it "should throwa an exception when file is .#{ext}" do
       filename = "#{SecureRandom.uuid}.#{ext}"
       file = Tempfile.new(filename)

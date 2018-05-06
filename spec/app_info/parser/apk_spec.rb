@@ -1,6 +1,8 @@
+require 'spec_helper'
+
 describe AppInfo::Parser::APK do
   describe '#PhoneOrTablet' do
-    let(:file) { File.dirname(__FILE__) + '/../../fixtures/apps/android.apk' }
+    let(:file) { APK_FILE }
     subject { AppInfo::Parser::APK.new(file) }
 
     it { expect(subject.os).to eq 'Android' }
@@ -22,7 +24,7 @@ describe AppInfo::Parser::APK do
   end
 
   describe '#Wear' do
-    let(:file) { File.dirname(__FILE__) + '/../../fixtures/apps/wear.apk' }
+    let(:file) { APK_WEAR_FILE }
     subject { AppInfo::Parser::APK.new(file) }
 
     it { expect(subject.os).to eq 'Android' }
@@ -42,7 +44,7 @@ describe AppInfo::Parser::APK do
   end
 
   describe '#TV' do
-    let(:file) { File.dirname(__FILE__) + '/../../fixtures/apps/tv.apk' }
+    let(:file) { APK_TV_FILE }
     subject { AppInfo::Parser::APK.new(file) }
 
     it { expect(subject.os).to eq 'Android' }
