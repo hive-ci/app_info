@@ -9,10 +9,10 @@ module AppInfo
 
       # APK Devices
       module Device
-        PHONE = 'Phone'.freeze
+        PHONE  = 'Phone'.freeze
         TABLET = 'Tablet'.freeze
-        WATCH = 'Watch'.freeze
-        TV = 'Television'.freeze
+        WATCH  = 'Watch'.freeze
+        TV     = 'Television'.freeze
       end
 
       def initialize(file)

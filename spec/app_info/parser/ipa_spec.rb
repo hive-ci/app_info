@@ -1,6 +1,8 @@
+require 'spec_helper'
+
 describe AppInfo::Parser::IPA do
   describe '#iPhone' do
-    let(:file) { File.dirname(__FILE__) + '/../../fixtures/apps/iphone.ipa' }
+    let(:file) { IPA_IPHONE_FILE }
     subject { AppInfo::Parser::IPA.new(file) }
 
     context 'parse' do
@@ -19,8 +21,8 @@ describe AppInfo::Parser::IPA do
       it { expect(subject.device_type).to eq('iPhone') }
 
       if AppInfo::Parser.mac?
-        it { expect(subject.release_type).to eq('AdHoc')}
-        it { expect(subject.build_type).to eq('AdHoc')}
+        it { expect(subject.release_type).to eq('AdHoc') }
+        it { expect(subject.build_type).to eq('AdHoc') }
         it { expect(subject.devices).to be_kind_of Array }
         it { expect(subject.team_name).to eq('QYER Inc') }
         it { expect(subject.profile_name).to eq('iOS Team Provisioning Profile: *') }
@@ -38,7 +40,7 @@ describe AppInfo::Parser::IPA do
   end
 
   describe '#iPad' do
-    let(:file) { File.dirname(__FILE__) + '/../../fixtures/apps/ipad.ipa' }
+    let(:file) { IPA_IPAD_FILE }
     subject { AppInfo::Parser::IPA.new(file) }
 
     context 'parse in macOS' do
@@ -57,8 +59,8 @@ describe AppInfo::Parser::IPA do
       it { expect(subject.device_type).to eq('iPad') }
 
       if AppInfo::Parser.mac?
-        it { expect(subject.release_type).to eq('inHouse')}
-        it { expect(subject.build_type).to eq('inHouse')}
+        it { expect(subject.release_type).to eq('inHouse') }
+        it { expect(subject.build_type).to eq('inHouse') }
         it { expect(subject.devices).to be_nil }
         it { expect(subject.team_name).to eq('QYER Inc') }
         it { expect(subject.profile_name).to eq('XC: *') }

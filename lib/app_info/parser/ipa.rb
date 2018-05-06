@@ -8,20 +8,38 @@ module AppInfo
   module Parser
     # IPA parser
     class IPA
-      attr_reader :file, :app_path
+      attr_accessor :file, :app_path
 
       # iOS Export types
       module ExportType
-        DEBUG = 'Debug'.freeze
-        ADHOC = 'AdHoc'.freeze
+        DEBUG   = 'Debug'.freeze
+        ADHOC   = 'AdHoc'.freeze
         INHOUSE = 'inHouse'.freeze
         RELEASE = 'Release'.freeze
-        UNKOWN = nil
+        UNKOWN  = nil
       end
 
       def initialize(file)
-        @file = file
-        @app_path = app_path
+        @file     = file
+        @app_path = app_path || file
+      end
+
+      def app_path
+        path = if @file.downcase.include? '.app'
+                 '*.app'
+               else
+                 File.join(contents, 'Payload', '*.app')
+               end
+
+        @app_path ||= Dir.glob(path).first
+      end
+
+      def metadata_path
+        @metadata_path ||= File.join(@contents || @app_path, 'iTunesMetadata.plist')
+      end
+
+      def info
+        @info ||= InfoPlist.new(@app_path)
       end
 
       def os
@@ -97,25 +115,14 @@ module AppInfo
       end
 
       def release_type
-        if stored?
-          ExportType::RELEASE
-        else
-          build_type
-        end
+        stored? ? ExportType::RELEASE : build_type
       end
 
       def build_type
         return ExportType::UNKOWN unless AppInfo::Parser.mac?
 
-        if mobileprovision?
-          if devices
-            ExportType::ADHOC
-          else
-            ExportType::INHOUSE
-          end
-        else
-          ExportType::DEBUG
-        end
+        ExportType::DEBUG unless mobileprovision?
+        devices ? ExportType::ADHOC : ExportType::INHOUSE
       end
 
       def stored?
@@ -142,7 +149,8 @@ module AppInfo
       def mobileprovision_path
         filename = 'embedded.mobileprovision'
         @mobileprovision_path ||= File.join(@file, filename)
-        unless File.exist?@mobileprovision_path
+
+        unless File.exist? @mobileprovision_path
           @mobileprovision_path = File.join(app_path, filename)
         end
 
@@ -151,6 +159,7 @@ module AppInfo
 
       def metadata
         return unless metadata?
+
         @metadata ||= CFPropertyList.native_types(CFPropertyList::List.new(file: metadata_path).value)
       end
 
@@ -158,28 +167,17 @@ module AppInfo
         File.exist?(metadata_path)
       end
 
-      def metadata_path
-        @metadata_path ||= File.join(@contents, 'iTunesMetadata.plist')
-      end
-
-      def info
-        @info ||= InfoPlist.new(@app_path)
-      end
-
-      def app_path
-        @app_path ||= Dir.glob(File.join(contents, 'Payload', '*.app')).first
-      end
-
       def cleanup!
         return unless @contents
+
         FileUtils.rm_rf(@contents)
 
-        @contents = nil
-        @icons = nil
-        @app_path = nil
-        @metadata = nil
+        @contents      = nil
+        @icons         = nil
+        @app_path      = nil
+        @metadata      = nil
         @metadata_path = nil
-        @info = nil
+        @info          = nil
       end
 
       alias bundle_id identifier
@@ -190,11 +188,12 @@ module AppInfo
         # source: https://github.com/soffes/lagunitas/blob/master/lib/lagunitas/ipa.rb
         unless @contents
           @contents = "#{Dir.mktmpdir}/AppInfo-ios-#{SecureRandom.hex}"
+
           Zip::File.open(@file) do |zip_file|
-            zip_file.each do |f|
-              f_path = File.join(@contents, f.name)
-              FileUtils.mkdir_p(File.dirname(f_path))
-              zip_file.extract(f, f_path) unless File.exist?(f_path)
+            zip_file.each do |file|
+              file_path = File.join(@contents, file.name)
+              FileUtils.mkdir_p(File.dirname(file_path))
+              zip_file.extract(file, file_path) unless File.exist?(file_path)
             end
           end
         end
@@ -204,7 +203,7 @@ module AppInfo
 
       def icons_root_path
         iphone = 'CFBundleIcons'.freeze
-        ipad = 'CFBundleIcons~ipad'.freeze
+        ipad   = 'CFBundleIcons~ipad'.freeze
 
         case device_type
         when 'iPhone'
@@ -215,6 +214,6 @@ module AppInfo
           [iphone, ipad]
         end
       end
-    end # /IPA
-  end # /Parser
-end # /AppInfo
+    end
+  end
+end

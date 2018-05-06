@@ -7,7 +7,7 @@ module AppInfo
   module Parser
     # App Platform
     module Platform
-      IOS = 'iOS'.freeze
+      IOS     = 'iOS'.freeze
       ANDROID = 'Android'.freeze
     end
 

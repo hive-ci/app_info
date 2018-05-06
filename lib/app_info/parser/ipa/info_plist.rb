@@ -41,7 +41,7 @@ module AppInfo
                            .try(:[], 'CFBundlePrimaryIcon')
                            .try(:[], 'CFBundleIconFiles')
 
-          next if icon_array.nil? || icon_array.count == 0
+          next if icon_array.nil? || icon_array.count.zero?
 
           icon_array.each do |items|
             Dir.glob(File.join(@app_path, "#{items}*")).find_all.each do |file|
@@ -107,7 +107,7 @@ module AppInfo
 
       def icons_root_path
         iphone = 'CFBundleIcons'.freeze
-        ipad = 'CFBundleIcons~ipad'.freeze
+        ipad   = 'CFBundleIcons~ipad'.freeze
 
         case device_type
         when 'iPhone'

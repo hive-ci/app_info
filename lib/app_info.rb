@@ -10,8 +10,8 @@ module AppInfo
     raise NotFoundError, file unless File.exist?(file)
 
     case File.extname(file).downcase
-    when '.ipa' then Parser::IPA.new(file)
-    when '.apk' then Parser::APK.new(file)
+    when '.ipa', '.app'     then Parser::IPA.new(file)
+    when '.apk'             then Parser::APK.new(file)
     when '.mobileprovision' then Parser::MobileProvision.new(file)
     else
       raise NotAppError, file

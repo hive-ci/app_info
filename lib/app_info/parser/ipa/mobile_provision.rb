@@ -44,12 +44,12 @@ module AppInfo
         mobileprovision.try(:[], 'Entitlements')
       end
 
-      def method_missing(method_name, *args, &block)
+      def method_missing(method_name, *_args)
         key = if method_name.to_s.include?('_')
-          method_name.to_s.split('_').map {|k| k.capitalize }.join('')
-        else
-          method_name.to_s
-        end
+                method_name.to_s.split('_').map(&:capitalize).join('')
+              else
+                method_name.to_s
+              end
 
         mobileprovision.try(:[], key)
       end
@@ -59,7 +59,7 @@ module AppInfo
       end
 
       def mobileprovision
-        return @mobileprovision = nil if @path.nil? or @path.empty? or !File.exist?(@path)
+        return @mobileprovision = nil if @path.nil? || @path.empty? || !File.exist?(@path)
 
         data = `security cms -D -i "#{@path}" 2> /dev/null`
         @mobileprovision = CFPropertyList.native_types(CFPropertyList::List.new(data: data).value)
