@@ -11,7 +11,7 @@ module AppInfo
 
     case File.extname(file).downcase
     when '.ipa', '.app'     then Parser::IOS::IPA.new(file)
-    when '.apk'             then Parser::APK.new(file)
+    when '.apk'             then Parser::Android::APK.new(file)
     when '.mobileprovision' then Parser::MobileProvision.new(file)
     else
       raise NotAppError, file

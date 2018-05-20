@@ -8,17 +8,17 @@ describe AppInfo do
 
   it 'should parse when file extion is .ipa' do
     file = AppInfo.parse(ipa_file)
-    expect(file.class).to eq(AppInfo::Parser::IPA)
+    expect(file.class).to eq(AppInfo::Parser::IOS::IPA)
   end
 
   it 'should parse when file extion is .app' do
     file = AppInfo.parse(app_file)
-    expect(file.class).to eq(AppInfo::Parser::IPA)
+    expect(file.class).to eq(AppInfo::Parser::IOS::IPA)
   end
 
   it 'should dump when file extion is .apk' do
     file = AppInfo.dump(ipa_file)
-    expect(file.class).to eq(AppInfo::Parser::IPA)
+    expect(file.class).to eq(AppInfo::Parser::IOS::IPA)
   end
 
   it 'should throwa an exception when file is not exist' do

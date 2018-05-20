@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe AppInfo::Parser::MobileProvision do
-  let(:ipa) { AppInfo::Parser::IPA.new(IPA_IPAD_FILE) }
+  let(:ipa) { AppInfo::Parser::IOS::IPA.new(IPA_IPAD_FILE) }
   subject { AppInfo::Parser::MobileProvision.new(ipa.mobileprovision_path) }
 
   if AppInfo::Parser.mac?
