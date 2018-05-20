@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe AppInfo::Parser::InfoPlist do
-  let(:ipa) { AppInfo::Parser::IPA.new(IPA_IPHONE_FILE) }
+  let(:ipa) { AppInfo::Parser::IOS::IPA.new(IPA_IPHONE_FILE) }
   subject { AppInfo::Parser::InfoPlist.new(ipa.app_path) }
 
   it { expect(subject.build_version).to eq('5') }

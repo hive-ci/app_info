@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'app_info/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'app-info'
+  spec.name          = 'app_info'
   spec.version       = AppInfo::VERSION
   spec.authors       = ['icyleaf']
   spec.email         = ['icyleaf.cn@gmail.com']
@@ -17,9 +17,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'CFPropertyList', '~> 3.0.0'
+  spec.add_dependency 'image_size', '~> 2.0'
   spec.add_dependency 'pngdefry', '~> 0.1.2'
   spec.add_dependency 'ruby_android', '~> 0.7.7'
-  spec.add_dependency 'image_size', '~> 2.0'
 
   spec.add_development_dependency 'bundler', '~> 1.16.1'
   spec.add_development_dependency 'rake', '~> 12.3.1'

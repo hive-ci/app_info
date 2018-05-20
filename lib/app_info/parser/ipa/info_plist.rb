@@ -1,9 +1,7 @@
-require 'cfpropertylist'
-
 module AppInfo
   module Parser
     # iOS Info.plist parser
-    class InfoPlist
+    class InfoPlist < Plist
       def initialize(app_path)
         @app_path = app_path
       end
@@ -86,7 +84,7 @@ module AppInfo
       end
 
       def release_type
-        if stored?
+        if app_store?
           'Store'
         else
           build_type
@@ -94,11 +92,7 @@ module AppInfo
       end
 
       def info
-        @info ||= CFPropertyList.native_types(CFPropertyList::List.new(file: info_path).value)
-      end
-
-      def info_path
-        File.join(@app_path, 'Info.plist')
+        @info ||= read(File.join(@app_path, Parser::IOS::INFO_PLIST))
       end
 
       alias bundle_id identifier

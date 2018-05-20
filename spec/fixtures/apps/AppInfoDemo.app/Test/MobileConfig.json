@@ -1,0 +1,24 @@
+{
+  "lastModified": "2017-06-15T12:45:16.340Z",
+  "cloud": {
+    "org": "Test"
+  },
+  "analytics": {
+    "ssl": true,
+    "offlineEnabled": true,
+    "charset": "UTF-8",
+    "lifecycleTimeout": 300,
+    "privacyDefault": "optedin",
+    "batchLimit": 0,
+    "timezone": "BST",
+    "timezoneOffset": 60,
+    "referrerTimeout": 5,
+    "backdateSessionInfo": false,
+    "poi": []
+  },
+  "messages": [],
+  "remotes": {
+    "analytics": "https://assets.app-info.com/new",
+    "messages": "https://assets.app-info.com/new/test"
+  }
+}

@@ -1,9 +1,13 @@
 require 'spec_helper'
 
-describe AppInfo::Parser::APK do
+describe AppInfo::Parser::Android::APK do
   describe '#PhoneOrTablet' do
     let(:file) { APK_FILE }
-    subject { AppInfo::Parser::APK.new(file) }
+    subject { AppInfo::Parser::Android::APK.new(file) }
+
+    it {
+      expect(subject.get_file_path('res/color/abc_search_url_text.xml')).to eq "#{subject.app_path}/res/color/abc_search_url_text.xml"
+    }
 
     it { expect(subject.os).to eq 'Android' }
     it { expect(subject.wear?).to be false }
@@ -25,7 +29,7 @@ describe AppInfo::Parser::APK do
 
   describe '#Wear' do
     let(:file) { APK_WEAR_FILE }
-    subject { AppInfo::Parser::APK.new(file) }
+    subject { AppInfo::Parser::Android::APK.new(file) }
 
     it { expect(subject.os).to eq 'Android' }
     it { expect(subject.wear?).to be true }
@@ -45,7 +49,7 @@ describe AppInfo::Parser::APK do
 
   describe '#TV' do
     let(:file) { APK_TV_FILE }
-    subject { AppInfo::Parser::APK.new(file) }
+    subject { AppInfo::Parser::Android::APK.new(file) }
 
     it { expect(subject.os).to eq 'Android' }
     it { expect(subject.wear?).to be false }
