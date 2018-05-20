@@ -89,6 +89,10 @@ module AppInfo
         @apk.resource
       end
 
+      def file_name(file)
+        @apk.find { |name, _data| return name if name.include?(file) }
+      end
+
       def icons
         unless @icons
           tmp_path = File.join(Dir.mktmpdir, "AppInfo-android-#{SecureRandom.hex}")

@@ -5,6 +5,8 @@ describe AppInfo::Parser::APK do
     let(:file) { APK_FILE }
     subject { AppInfo::Parser::APK.new(file) }
 
+    it { expect(subject.file_name('abc_search_url_text.xml')).to eq 'res/color/abc_search_url_text.xml' }
+
     it { expect(subject.os).to eq 'Android' }
     it { expect(subject.wear?).to be false }
     it { expect(subject.tv?).to be false }

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe AppInfo::Parser::IPA do
+describe AppInfo::Parser::IOS::IPA do
   describe '#iPhone' do
     let(:file) { IPA_IPHONE_FILE }
-    subject { AppInfo::Parser::IPA.new(file) }
+    subject { AppInfo::Parser::IOS::IPA.new(file) }
 
     context 'parse' do
       it { expect(subject.os).to eq 'iOS' }
@@ -32,8 +32,7 @@ describe AppInfo::Parser::IPA do
 
       it { expect(subject.mobileprovision?).to be true }
       it { expect(subject.metadata).to be_nil }
-      it { expect(subject.metadata?).to be false }
-      it { expect(subject.stored?).to be false }
+      it { expect(subject.app_store?).to be false }
       it { expect(subject.info).to be_kind_of AppInfo::Parser::InfoPlist }
       it { expect(subject.mobileprovision).to be_kind_of AppInfo::Parser::MobileProvision }
     end
@@ -41,7 +40,7 @@ describe AppInfo::Parser::IPA do
 
   describe '#iPad' do
     let(:file) { IPA_IPAD_FILE }
-    subject { AppInfo::Parser::IPA.new(file) }
+    subject { AppInfo::Parser::IOS::IPA.new(file) }
 
     context 'parse in macOS' do
       it { expect(subject.os).to eq 'iOS' }
@@ -70,8 +69,7 @@ describe AppInfo::Parser::IPA do
 
       it { expect(subject.mobileprovision?).to be true }
       it { expect(subject.metadata).to be_nil }
-      it { expect(subject.metadata?).to be false }
-      it { expect(subject.stored?).to be false }
+      it { expect(subject.app_store?).to be false }
       it { expect(subject.ipad?).to be true }
       it { expect(subject.info).to be_kind_of AppInfo::Parser::InfoPlist }
       it { expect(subject.mobileprovision).to be_kind_of AppInfo::Parser::MobileProvision }
@@ -106,8 +104,7 @@ describe AppInfo::Parser::IPA do
 
       it { expect(subject.mobileprovision?).to be true }
       it { expect(subject.metadata).to be_nil }
-      it { expect(subject.metadata?).to be false }
-      it { expect(subject.stored?).to be false }
+      it { expect(subject.app_store?).to be false }
       it { expect(subject.ipad?).to be true }
       it { expect(subject.info).to be_kind_of AppInfo::Parser::InfoPlist }
       it { expect(subject.mobileprovision).to be_kind_of AppInfo::Parser::MobileProvision }
