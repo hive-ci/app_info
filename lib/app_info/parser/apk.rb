@@ -125,24 +125,22 @@ module AppInfo
         end
 
         def icons
-          unless @icons
-            tmp_path = File.join(Dir.mktmpdir, "AppInfo-android-#{SecureRandom.hex}")
+          tmp_path = File.join(Dir.mktmpdir, "AppInfo-android-#{SecureRandom.hex}") if @icons.nil?
 
-            @icons = @apk.icon.each_with_object([]) do |(path, data), obj|
-              icon_name = File.basename(path)
-              icon_path = File.join(tmp_path, File.path(path))
-              icon_file = File.join(icon_path, icon_name)
-              FileUtils.mkdir_p icon_path
-              File.open(icon_file, 'w') do |f|
-                f.write data
-              end
-
-              obj << {
-                name: icon_name,
-                file: icon_file,
-                dimensions: ImageSize.path(icon_file).size
-              }
+          @icons ||= @apk.icon.each_with_object([]) do |(path, data), obj|
+            icon_name = File.basename(path)
+            icon_path = File.join(tmp_path, File.path(path))
+            icon_file = File.join(icon_path, icon_name)
+            FileUtils.mkdir_p icon_path
+            File.open(icon_file, 'w') do |f|
+              f.write data
             end
+
+            obj << {
+              name: icon_name,
+              file: icon_file,
+              dimensions: ImageSize.path(icon_file).size
+            }
           end
 
           @icons
@@ -160,20 +158,19 @@ module AppInfo
 
         alias identifier bundle_id
         alias package_name bundle_id
-        alias device_type os
 
         private
 
         def contents
-          unless @contents
-            @contents = "#{Dir.mktmpdir}/AppInfo-android-#{SecureRandom.hex}"
+          @contents ||= "#{Dir.mktmpdir}/AppInfo-android-#{SecureRandom.hex}"
 
-            Zip::File.open(@file) do |zip_file|
-              zip_file.each do |file|
-                file_path = File.join(@contents, file.name)
-                FileUtils.mkdir_p(File.dirname(file_path))
-                zip_file.extract(file, file_path) unless File.exist?(file_path)
-              end
+          return @contents unless @contents
+
+          Zip::File.open(@file) do |zip_file|
+            zip_file.each do |file|
+              file_path = File.join(@contents, file.name)
+              FileUtils.mkdir_p(File.dirname(file_path))
+              zip_file.extract(file, file_path) unless File.exist?(file_path)
             end
           end
 

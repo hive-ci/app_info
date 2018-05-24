@@ -211,15 +211,15 @@ module AppInfo
 
         def contents
           # source: https://github.com/soffes/lagunitas/blob/master/lib/lagunitas/ipa.rb
-          unless @contents
-            @contents = "#{Dir.mktmpdir}/AppInfo-ios-#{SecureRandom.hex}"
+          @contents ||= "#{Dir.mktmpdir}/AppInfo-ios-#{SecureRandom.hex}"
 
-            Zip::File.open(@file) do |zip_file|
-              zip_file.each do |file|
-                file_path = File.join(@contents, file.name)
-                FileUtils.mkdir_p(File.dirname(file_path))
-                zip_file.extract(file, file_path) unless File.exist?(file_path)
-              end
+          return @contents unless @contents
+
+          Zip::File.open(@file) do |zip_file|
+            zip_file.each do |file|
+              file_path = File.join(@contents, file.name)
+              FileUtils.mkdir_p(File.dirname(file_path))
+              zip_file.extract(file, file_path) unless File.exist?(file_path)
             end
           end
 
